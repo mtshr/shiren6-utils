@@ -1,0 +1,49 @@
+.bouncy_walls {
+	padding: 8px;
+
+	.view {
+		display: grid;
+		overflow-x: auto;
+		padding: 15px;
+		border-radius: 8px;
+		background-color: rgb(176, 176, 176);
+		grid-auto-columns: 64px;
+		grid-auto-rows: 64px;
+		column-gap: 6px;
+		row-gap: 6px;
+
+		.cell {
+			border-radius: 5px;
+			box-shadow: 0px 10px 15px 0 rgba(0, 0, 0, .35);
+		}
+
+		.cell_inner {
+			border-radius: 5px;
+			background: radial-gradient(farthest-corner at 70% 10%, rgb(248, 248, 248, .85), rgb(0, 248, 248, .0));
+			width: 48px;
+			height: 48px;
+			margin: 8px;
+		}
+
+		.vacant_bg {
+			background-color: rgb(208, 144, 0);
+		}
+
+		.wall_bg {
+			background-color: rgb(96, 64, 0);
+		}
+
+		.pit_bg {
+			background-color: rgb(32, 32, 0);
+		}
+
+		.water_bg {
+			background-color: rgb(0, 96, 200);
+		}
+
+		.bouncy_wall_bg {
+			background: linear-gradient(45deg, rgb(248, 0, 180), rgb(24, 24, 248), rgb(248, 0, 180));
+		}
+
+	}
+}
