@@ -175,6 +175,49 @@ fn input_area(props: &InputAreaProperties) -> Html {
 	html! {
 		<div class="input_area">
 			<textarea class={textarea_class} ref={node_ref} rows={10} columns={32} oninput={oninput} spellcheck="false" value={value}/>
+			<table>
+				<thead>
+					<tr>
+						<th scope="col">{"文字"}</th>
+						<th scope="col">{"マス"}</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th scope="row">
+							<pre><code>{' '}</code></pre>
+							<pre><code>{'.'}</code></pre>
+						</th>
+						<td>{"空きマス"}</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<pre><code>{'#'}</code></pre>
+						</th>
+						<td>{"壁"}</td>
+					</tr>
+					<tr>
+						<th scope="row">
+						<pre><code>{','}</code></pre>
+						<pre><code>{'p'}</code></pre>
+						</th>
+						<td>{"穴・空域"}</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<pre><code>{'~'}</code></pre>
+							<pre><code>{'w'}</code></pre>
+						</th>
+						<td>{"水"}</td>
+					</tr>
+					<tr>
+						<th scope="row">
+							<pre><code>{'b'}</code></pre>
+						</th>
+						<td>{"ボヨヨン壁"}</td>
+					</tr>
+				</tbody>
+			</table>
 		</div>
 	}
 }

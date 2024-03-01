@@ -6,9 +6,9 @@ use yew::prelude::*;
 #[function_component(App)]
 fn app() -> Html {
 	html! {
-		<div style={"text-align: center"}>
+		<div>
 			<bouncy_walls::BouncyWalls />
-			<div>
+			<div style="text-align: center">
 				<a href={"https://github.com/mtshr"}>{"@mtshr"}</a>
 			</div>
 		</div>
