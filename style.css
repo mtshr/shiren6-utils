@@ -44,6 +44,30 @@
 		.bouncy_wall_bg {
 			background: linear-gradient(45deg, rgb(248, 0, 180), rgb(24, 24, 248), rgb(248, 0, 180));
 		}
-
 	}
+
+	.input_area {
+		padding: 32px;
+
+		textarea {
+			font-family: 'Courier New', Courier, monospace;
+			letter-spacing: 0.1em;
+			font-size: 1.25em;
+			min-width: 20em;
+			resize: vertical;
+		}
+	}
+}
+
+textarea.error {
+	border: 2px solid red;
+	border-radius: 3px;
+	box-shadow: 0 0 4px red;
+}
+
+textarea:focus.error {
+	border: 2px solid red;
+	border-radius: 3px;
+	box-shadow: 0 0 4px red;
+	outline: none;
 }

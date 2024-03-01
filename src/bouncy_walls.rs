@@ -2,6 +2,8 @@ use std::iter;
 
 use yew::prelude::*;
 
+use web_sys::HtmlTextAreaElement;
+
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum CellKind {
 	Vacant,
@@ -32,6 +34,8 @@ struct Cells {
 	height: usize,
 }
 
+type CellsResult = Result<Cells, CellsError>;
+
 impl Cells {
 	fn get(&self, y: usize, x: usize) -> Option<CellKind> {
 		(y < self.height && x < self.width).then(|| self.kinds[y * self.width + x])
@@ -48,13 +52,14 @@ impl TryFrom<&str> for Cells {
 	type Error = CellsError;
 
 	fn try_from(value: &str) -> Result<Self, Self::Error> {
+		let value = value.trim_end().trim_start_matches("\n");
 		let (height, width) = value
 			.lines()
 			.enumerate()
 			.map(|(i, line)| (i, line.chars().count()))
 			.fold((0, 0), |r, (i, c)| (i + 1, r.1.max(c)));
 
-		if height > 16 || width > 16 {
+		if height > 24 || width > 24 {
 			return Err(CellsError::TooLarge);
 		}
 
@@ -84,8 +89,8 @@ impl TryFrom<&str> for Cells {
 }
 
 #[derive(PartialEq, Properties)]
-pub struct CellProperties {
-	cells: UseStateHandle<Result<Cells, CellsError>>,
+struct CellProperties {
+	cells: UseStateHandle<CellsResult>,
 	y: usize,
 	x: usize,
 }
@@ -110,20 +115,14 @@ fn cell_panel(props: &CellProperties) -> Html {
 	}
 }
 
-#[function_component(View)]
-fn view() -> Html {
-	let cells = use_state(|| {
-		<Cells as TryFrom<_>>::try_from(
-			r#"#bbbbbbbb##
-bb......bbb
-b
-b.........b
-b.........b
-bbbb....bbb
-###bbb bb##"#,
-		)
-	});
+#[derive(PartialEq, Properties)]
+struct ViewProperties {
+	cells: UseStateHandle<CellsResult>,
+}
 
+#[function_component(View)]
+fn view(props: &ViewProperties) -> Html {
+	let cells = props.cells.clone();
 	let (len, width) = cells
 		.as_ref()
 		.map_or((0, 0), |cells| (cells.kinds.len(), cells.width));
@@ -143,11 +142,60 @@ bbbb....bbb
 	}
 }
 
+#[derive(PartialEq, Properties)]
+struct InputAreaProperties {
+	cells: UseStateHandle<CellsResult>,
+}
+
+#[function_component(InputArea)]
+fn input_area(props: &InputAreaProperties) -> Html {
+	let node_ref = use_node_ref();
+
+	let value_handle = use_state(|| AttrValue::from(INITIAL_CELLS));
+	let value = (*value_handle).clone();
+
+	let oninput = {
+		let node_ref = node_ref.clone();
+		let cells_handle = props.cells.clone();
+
+		Callback::from(move |_| {
+			let textarea = node_ref.cast::<HtmlTextAreaElement>();
+
+			if let Some(input) = textarea {
+				let value = input.value();
+				let cells: CellsResult = TryFrom::try_from(value.as_ref());
+				cells_handle.set(cells);
+				value_handle.set(AttrValue::from(value));
+			}
+		})
+	};
+
+	let textarea_class = props.cells.as_ref().map_or("error", |_| "");
+
+	html! {
+		<div class="input_area">
+			<textarea class={textarea_class} ref={node_ref} rows={10} columns={32} oninput={oninput} spellcheck="false" value={value}/>
+		</div>
+	}
+}
+
+const INITIAL_CELLS: &str = r#"#bbbbbbbb##
+bb......bbb
+b
+b.........b
+b.........b
+bbbb....bbb
+###bbb.bb##
+"#;
+
 #[function_component(BouncyWalls)]
 pub fn bouncy_walls() -> Html {
+	let cells = use_state(|| <Cells as TryFrom<_>>::try_from(INITIAL_CELLS));
+
 	html! {
 		<div class="bouncy_walls">
-			<View />
+			<View cells={cells.clone()} />
+			<InputArea cells={cells} />
 		</div>
 	}
 }
