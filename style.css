@@ -58,6 +58,12 @@
 			resize: vertical;
 		}
 
+		select {
+			margin: 13px 0;
+			font-size: 1em;
+			width: 10em;
+		}
+
 		table {
 			tbody {
 				th {
