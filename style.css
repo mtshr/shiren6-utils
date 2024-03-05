@@ -25,6 +25,28 @@
 			margin: 8px;
 		}
 
+		.path {
+			margin-top: -5px;
+			margin-left: -5px;
+			width: 74px;
+			height: 74px;
+			z-index: 1;
+		}
+
+		.diagonal1 {
+			background: linear-gradient(45deg, transparent 47%, red 47%, red 53%, transparent 53%);
+		}
+
+		.diagonal2 {
+			background: linear-gradient(135deg, transparent 47%, red 47%, red 53%, transparent 53%);
+		}
+
+		.diagonal12 {
+			background:
+				linear-gradient(45deg, transparent 47%, red 47%, red 53%, transparent 53%),
+				linear-gradient(135deg, transparent 47%, red 47%, red 53%, transparent 53%);
+		}
+
 		.vacant_bg {
 			background-color: rgb(208, 144, 0);
 		}

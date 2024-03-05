@@ -11,25 +11,29 @@ struct CellProperties {
 	cells: UseStateHandle<CellsResult>,
 	y: usize,
 	x: usize,
+	path: UseStateHandle<Option<Vec<u8>>>,
 }
 
 #[function_component(Cell)]
 fn cell_panel(props: &CellProperties) -> Html {
-	let CellProperties { x, y, .. } = props;
-	let cell = props
-		.cells
-		.as_ref()
-		.unwrap()
-		.get(*y, *x)
-		.expect("Could not obtain the cell kind.");
+	let CellProperties { x, y, path, .. } = props;
+	let cells = props.cells.as_ref().unwrap();
+	let cell = cells.get(*y, *x).expect("Could not obtain the cell kind.");
+
+	let (_, width) = cells.get_size();
+	let path = path.as_ref().map_or(0, |path| path[y * width + x] as usize);
 
 	html! {
-		<div class={classes!("cell", cell.get_bg_class_name())} style={format!("grid-row: {}; grid-column: {};", props.y + 1, props.x + 1)}>
-		if cell == CellKind::BouncyWall {
-			<div class="cell_inner">
+		<>
+			<div class={classes!("cell", cell.get_bg_class_name())} style={format!("grid-row: {}; grid-column: {};", props.y + 1, props.x + 1)}>
+			if cell == CellKind::BouncyWall {
+				<div class="cell_inner">
+				</div>
+			}
 			</div>
-		}
-		</div>
+			<div class={classes!("path", ["", "diagonal1", "diagonal2", "diagonal12"][path])} style={format!("grid-row: {}; grid-column: {};", props.y + 1, props.x + 1)}>
+			</div>
+		</>
 	}
 }
 
@@ -50,7 +54,7 @@ fn view(props: &ViewProperties) -> Html {
 			(0..height * width)
 			.map(|i| {
 				html! {
-					<Cell cells={cells.clone()} y={i / width} x={i % width} />
+					<Cell cells={cells.clone()} y={i / width} x={i % width} path={props.path.clone()}/>
 				}
 			})
 			.collect::<Html>()
@@ -101,14 +105,17 @@ fn input_area(props: &InputAreaProperties) -> Html {
 
 	let onchange = {
 		let node_ref = select_ref.clone();
+		let cells_handle = props.cells.clone();
+		let representatives_handle = props.representatives.clone();
 		let path_handle = props.path.clone();
 
 		Callback::from(move |_| {
 			let select = node_ref.cast::<HtmlSelectElement>();
 
 			if let Some(select) = select {
-				let id = select.selected_index();
-				path_handle.set(Some(vec![id as u8]));
+				let index: usize = select.value().parse().unwrap();
+				let v = representatives_handle[index];
+				path_handle.set(cells_handle.as_ref().unwrap().trace(v).into());
 			}
 		})
 	};
@@ -185,8 +192,8 @@ bbbb....bbb
 
 #[function_component(BouncyWalls)]
 pub fn bouncy_walls() -> Html {
-	let cells = use_state(|| TryFrom::try_from(INITIAL_CELLS));
-	let representatives = use_state(|| Vec::new());
+	let cells: UseStateHandle<CellsResult> = use_state(|| TryFrom::try_from(INITIAL_CELLS));
+	let representatives = use_state(|| cells.clone().as_ref().unwrap().find_routes());
 	let path = use_state(|| None);
 
 	html! {
