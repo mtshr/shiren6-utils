@@ -95,6 +95,10 @@
 	}
 }
 
+.price_list {
+	padding: 8px;
+}
+
 textarea.error {
 	border: 2px solid red;
 	border-radius: 3px;

@@ -1,4 +1,5 @@
 mod bouncy_walls;
+mod price_list;
 
 use wasm_bindgen::prelude::*;
 use yew::prelude::*;
@@ -10,12 +11,15 @@ enum Route {
 	Home,
 	#[at("/bouncy-walls")]
 	BouncyWalls,
+	#[at("/price-list")]
+	PriceList,
 }
 
 fn switch(routes: Route) -> Html {
 	match routes {
 		Route::Home => html! {},
 		Route::BouncyWalls => html! { <bouncy_walls::BouncyWalls /> },
+		Route::PriceList => html! { <price_list::PriceList /> },
 	}
 }
 
@@ -25,6 +29,7 @@ fn menu() -> Html {
 		<div>
 			<div><Link<Route> to={Route::Home}>{"Top"}</Link<Route>></div>
 			<div><Link<Route> to={Route::BouncyWalls}>{"ボヨヨン壁 成功パスサーチ"}</Link<Route>></div>
+			<div><Link<Route> to={Route::PriceList}>{"価格表"}</Link<Route>></div>
 		</div>
 	}
 }
