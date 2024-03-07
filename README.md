@@ -3,3 +3,4 @@
 https://mtshr.github.io/shiren6-utils/
 
 - ボヨヨン壁 成功パスサーチ
+- 鑑定補助 値段検索
