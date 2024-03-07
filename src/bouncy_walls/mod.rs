@@ -21,6 +21,7 @@ fn cell_panel(props: &CellProperties) -> Html {
 	let cell = cells.get(*y, *x).expect("Could not obtain the cell kind.");
 
 	let (_, width) = cells.get_size();
+	// mathematically `path == 3` should not happen
 	let path = path.as_ref().map_or(0, |path| path[y * width + x] as usize);
 
 	html! {
@@ -31,7 +32,7 @@ fn cell_panel(props: &CellProperties) -> Html {
 				</div>
 			}
 			</div>
-			<div class={classes!("path", ["", "diagonal1", "diagonal2", "diagonal12"][path])} style={format!("grid-row: {}; grid-column: {};", props.y + 1, props.x + 1)}>
+			<div class={classes!("path", ["", "diagonal1", "diagonal2"][path])} style={format!("grid-row: {}; grid-column: {};", props.y + 1, props.x + 1)}>
 			</div>
 		</>
 	}
