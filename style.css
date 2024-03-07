@@ -97,6 +97,31 @@
 
 .price_list {
 	padding: 8px;
+
+	.input_label {
+		margin-right: 1em;
+	}
+
+	.container {
+		.category {
+			display: inline-block;
+			margin: 0.5em;
+			padding: 0 5px;
+			font-size: 1.25em;
+			border-bottom: solid 3px;
+			border-color: skyblue;
+		}
+
+		table {
+			.state {
+				border-right: none;
+			}
+
+			.name {
+				border-left: none;
+			}
+		}
+	}
 }
 
 textarea.error {

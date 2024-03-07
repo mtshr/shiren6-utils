@@ -29,7 +29,7 @@ fn menu() -> Html {
 		<div>
 			<div><Link<Route> to={Route::Home}>{"Top"}</Link<Route>></div>
 			<div><Link<Route> to={Route::BouncyWalls}>{"ボヨヨン壁 成功パスサーチ"}</Link<Route>></div>
-			<div><Link<Route> to={Route::PriceList}>{"価格表"}</Link<Route>></div>
+			<div><Link<Route> to={Route::PriceList}>{"鑑定補助 値段検索"}</Link<Route>></div>
 		</div>
 	}
 }
